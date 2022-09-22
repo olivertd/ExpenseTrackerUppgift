@@ -1,0 +1,15 @@
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.csproj.AssemblyReference.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.GeneratedMSBuildEditorConfig.editorconfig
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.AssemblyInfoInputs.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.AssemblyInfo.cs
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.csproj.CoreCompileInputs.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/bin/Debug/net6.0/ExpenseTrackerUppgift
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/bin/Debug/net6.0/ExpenseTrackerUppgift.deps.json
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/bin/Debug/net6.0/ExpenseTrackerUppgift.runtimeconfig.json
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/bin/Debug/net6.0/ExpenseTrackerUppgift.dll
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/bin/Debug/net6.0/ExpenseTrackerUppgift.pdb
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.dll
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/refint/ExpenseTrackerUppgift.dll
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.pdb
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ExpenseTrackerUppgift.genruntimeconfig.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/ExpenseTrackerUppgift/obj/Debug/net6.0/ref/ExpenseTrackerUppgift.dll

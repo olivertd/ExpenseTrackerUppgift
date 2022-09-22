@@ -1,0 +1,15 @@
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/bin/Debug/net6.0/TEST2
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/bin/Debug/net6.0/TEST2.deps.json
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/bin/Debug/net6.0/TEST2.runtimeconfig.json
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/bin/Debug/net6.0/TEST2.dll
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/bin/Debug/net6.0/TEST2.pdb
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.csproj.AssemblyReference.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.GeneratedMSBuildEditorConfig.editorconfig
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.AssemblyInfoInputs.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.AssemblyInfo.cs
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.csproj.CoreCompileInputs.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.dll
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/refint/TEST2.dll
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.pdb
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/TEST2.genruntimeconfig.cache
+/Users/olivertalcoth/Code/Assignment2/ExpenseTrackerUppgift/TEST2/obj/Debug/net6.0/ref/TEST2.dll
