@@ -15,7 +15,6 @@ namespace ExpenseTrackerUppgift
         
     }
     
-
     public class Program
     {
         public static List<Expense> expenses = new List<Expense>();
@@ -47,7 +46,7 @@ namespace ExpenseTrackerUppgift
             AddExpense(utgiftNamn, utgiftPris, utgiftKategori);
             
         }
-        
+
         public static void Main()
         {
             

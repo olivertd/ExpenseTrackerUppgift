@@ -3,25 +3,25 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Xml;
 
 namespace ExpenseTrackerUppgift
 {
     public class Expense
     {
         public string ExpenseNamn { get; set; }
-        public double ExpensePris { get; set; }
+        public decimal ExpensePris { get; set; } // changed double to decimal to use it in SumExpenses method
         public string ExpenseKategori { get; set; }
-        
+
     }
-    
 
     public class Program
     {
         public static List<Expense> expenses = new List<Expense>();
-        
+
         //FUNKTION FÖR ATT LÄGGA TILL NY EXPENSE
-        public static void AddExpense(string expenseNamn, double expensePris, string expenseKategori)
+        public static void
+            AddExpense(string expenseNamn, decimal expensePris,
+                string expenseKategori) //double expensePris changed to decimal
         {
             var expense = new Expense();
             expense.ExpenseNamn = expenseNamn;
@@ -34,19 +34,20 @@ namespace ExpenseTrackerUppgift
         public static void AskUserforExpenseParamters()
         {
             Console.WriteLine("DU SKALL LÄGGA TILL EN UTGIFT");
-            
+
             Console.Write("Vad har din utgift för namn?: ");
             string utgiftNamn = Console.ReadLine();
 
             Console.Write("Vad har din utgift för pris Kr (inkl moms) ?: ");
-            double utgiftPris = Convert.ToDouble(Console.ReadLine());
+            decimal utgiftPris = Convert.ToDecimal(Console.ReadLine()); // double utgiftPris changed to decimal
 
             string utgiftKategori = "";
-            
+
             bool running = true;
-            
+
             while (running)
             {
+                Console.WriteLine();
                 int selectedOption = ShowMenu("VILKEN KATEGORI TILLHÖR DIN UTGIFT?", new[]
                 {
                     "Utbildning",
@@ -86,18 +87,77 @@ namespace ExpenseTrackerUppgift
                 else
                 {
                     Console.WriteLine("Du har valt fel");
-                } 
+                }
 
             }
 
             AddExpense(utgiftNamn, utgiftPris, utgiftKategori);
-            
+
+        }
+        //FUNKTION FÖR SUM EXONSES CATEGORY
+        public static void SumExpensesCategory()
+        {
+            bool running = true;
+            while(running)
+            {
+                MakeSpaceForUserMenu();
+                int selectedOptionChooseCat = ShowMenu("VILKEN KATEGORI TILLHÖR DIN UTGIFT?", new[]
+                {
+                    "Utbildning",
+                    "Livsemedel",
+                    "Underhållning",
+                    "Övrigt",
+                    "Avbryt visa summa per kategori"
+                });
+                if (selectedOptionChooseCat == 0)
+                {
+                    var sum = expenses.Where(x => x.ExpenseKategori == "Utbildning").Sum(x => x.ExpensePris);
+                    Console.Clear();
+                    Console.WriteLine($"Summan av dina utbildningsutgifter (inkl moms) är {sum}kr");
+                    Console.WriteLine($"Summan av dina utbildningsutgifter (EX moms) är {sum}kr");
+                }
+                else if (selectedOptionChooseCat == 1)
+                {
+                    var sum = expenses.Where(x => x.ExpenseKategori == "Livsmedel").Sum(x => x.ExpensePris);
+                    Console.Clear();
+                    Console.WriteLine($"Summan av dina livsmedelsutgifter (inkl moms) är {sum}kr");
+                    Console.WriteLine($"Summan av dina livsmedelsutgifter (EX moms) är {sum - sum * 0.06m}kr");
+                }
+                else if (selectedOptionChooseCat == 2)
+                {
+                    var sum = expenses.Where(x => x.ExpenseKategori == "Underhållning").Sum(x => x.ExpensePris);
+                    Console.Clear();
+                    Console.WriteLine($"Summan av dina underhållningsutgifter (inkl moms) är {sum}kr");
+                    Console.WriteLine($"Summan av dina underhållningsutgifter (EX moms) är {sum - sum * 0.12m}kr");
+                }
+                else if (selectedOptionChooseCat == 3)
+                {
+                    var sum = expenses.Where(x => x.ExpenseKategori == "Övrigt").Sum(x => x.ExpensePris);
+                    Console.Clear();
+                    Console.WriteLine($"Summan av dina övriga utgifter är (inkl moms) {sum}kr");
+                    Console.WriteLine($"Summan av dina övriga (EX moms) är {sum - sum * 0.25m}kr");
+                }
+                else if (selectedOptionChooseCat == 4)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Du har valt att avbryta att visa summa per kategori");
+                    running = false;
+                }
+            }
+
         }
         
+        //FUNKTION FÖR ATT GÖRA SPACE FÖR USERSELECTIONMENY
+        static void MakeSpaceForUserMenu()
+        {
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
         public static void Main()
         {
-            
-            
             //FIN VÄLKOMST TILL PROGRAMMET OCH SE TILL ATT INGA PROBLEM MED SVENSKA KARAKTÄRER SKER
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             Console.WriteLine("███████████████████████████████████████████████████████████████████████");
@@ -108,12 +168,9 @@ namespace ExpenseTrackerUppgift
 
             //GÖR EN WHILE LOOP SOM KÖRS TILLS ANVÄNDAREN HAR KLICKAT PÅ AVSLUTA I MENYN
             bool running = true;
-            while (running)  
+            while (running)
             {
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine();
+                MakeSpaceForUserMenu();
                 int selectedOption = ShowMenu("Vad vill du göra?", new[]
                 {
                     "Lägg till utgift",
@@ -123,7 +180,7 @@ namespace ExpenseTrackerUppgift
                     "Avsluta"
                 });
                 Console.Clear();
-                
+
                 if (selectedOption == 4)
                 {
                     running = false;
@@ -131,39 +188,48 @@ namespace ExpenseTrackerUppgift
 
                 if (selectedOption == 0)
                 {
-                    
+
                     Console.WriteLine("DU HAR VALT ATT LÄGGA TILL EN UTGIFT");
                     //CALLA AD TO CART METOD
                     AskUserforExpenseParamters();
                     Console.WriteLine("UTGIFTEN HAR LÄGGTS TILL");
-                    
-                    
+
+
                 }
+
                 if (selectedOption == 1)
                 {
-                    
+
                     Console.WriteLine("DU HAR VALT ATT VISA ALLA UTGIFTER");
                     // print the list of expenses
                     Console.WriteLine("UTGIFTERNA ÄR:");
+
                     foreach (var expense in expenses)
                     {
                         Console.WriteLine(
                             $"Namn: {expense.ExpenseNamn},  Pris inkl moms: {expense.ExpensePris}Kr,  Kategori: {expense.ExpenseKategori}");
                     }
+
+                    int addedByUser = expenses.Count;
+                    Console.WriteLine();
+                    Console.WriteLine("ANTAL UTGIFTER: " + addedByUser);
+                    Console.WriteLine(
+                        $"Summa (inkl moms):  {Math.Round(SumExpenses(expenses, true), 2)} KR  ({Math.Round(SumExpenses(expenses, false), 2)} KR exkl. moms)");
                 }
 
                 if (selectedOption == 2)
                 {
                     Console.WriteLine("DU HAR VALT ATT VISA SUMMA PER KATEGORI");
                     //CALLA PRINT SUMMA PER KATEGORI FUNKTION
-                    Console.ReadLine();
+                    SumExpensesCategory();
                 }
+
                 if (selectedOption == 3)
                 {
                     bool runningDelete = true;
                     while (runningDelete)
                     {
-                        int selectedOptionDelete = ShowMenu("ÄR DU SÄKER PÅ ATT DU VILL TA BORT ALLA UPPGIFTER? ", new[]
+                        int selectedOptionDelete = ShowMenu("ÄR DU SÄKER PÅ ATT DU VILL TA BORT ALLA UTGIFTER? ", new[]
                         {
                             "JA",
                             "NEJ",
@@ -176,13 +242,10 @@ namespace ExpenseTrackerUppgift
                         }
                         else break;
                     }
-                    
-                
-                    
                 }
-                
+
             }
-            
+
             //AVSLUTA PROGRAMMET
             Console.WriteLine("███████████████████████████████████████████████████████████████████████");
             Console.WriteLine("█▄─▀─▄█▄─▄▄─█▄─▄▄─█▄─▀█▄─▄█─▄▄▄▄█▄─▄▄─███─▄─▄─█▄─▄▄▀█─▄▄▄─█▄─█─▄█▄─▄▄▀█");
@@ -190,24 +253,48 @@ namespace ExpenseTrackerUppgift
             Console.WriteLine("▀▄▄█▄▄▀▄▄▄▀▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▄▄▄▄▄▀▄▄▀▄▄▀▄▄▀▄▄▀");
             Console.WriteLine("TACK FÖR ATT DU ANVÄNT XPENSE TRCKR, HA EN FIN DAG");
 
-            
         }
-
 
         // Return the sum of all expenses in the specified list, with or without VAT based on the second parameter.
         // This method *must* be in the program and *must* be used in both the main program and in the tests.
+        //
+        //IMPORTANT, IF ANY VALUES IN THIS METHOD ARE TO BE CHANGED, IT NEEDS TO BE CHANGED IN THE SumExpensesCategory ASWELL!
+        //THIS IS BECAUSE A SECOND FUNCTION IS USED TO ONLY CALCULATE THE SUM INCLUDEVAT AND THE SUM DONT INCLUDEVAT FOR ONLY ONE CATEGORY!
+        //THIS METOD IS SumExpensesCategory
+        //
         public static decimal SumExpenses(List<Expense> expenses, bool includeVAT)
         {
             decimal sum = 0;
-            // Implement the rest of this method here.
+            foreach (Expense expense in expenses)
+            {
+                if (includeVAT == false)
+                {
+                    if (expense.ExpenseKategori == "Utbildning")
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * 0);
+                    }
+                    else if (expense.ExpenseKategori == "Livsmedel")
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * 0.06m);
+                    }
+                    else if (expense.ExpenseKategori == "Underhållning")
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * 0.12m);
+                    }
+                    else
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * 0.25m);
+                    }
+                }
+                else
+                {
+                    sum += expense.ExpensePris;
+                }
+            }
+
             return sum;
         }
 
-        
-        
-        
-        
-        
         // Do not change this method.
         // For more information about ShowMenu: https://csharp.jakobkallin.com/large-exercises/
         public static int ShowMenu(string prompt, IEnumerable<string> options)
@@ -242,6 +329,7 @@ namespace ExpenseTrackerUppgift
 
                 Console.ResetColor();
             }
+
             Console.CursorLeft = 0;
             Console.CursorTop = top - 1;
 
@@ -286,4 +374,5 @@ namespace ExpenseTrackerUppgift
             Console.CursorVisible = true;
             return selected;
         }
-    }}
+    }
+}
