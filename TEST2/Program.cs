@@ -1,4 +1,6 @@
 ﻿
+
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -6,22 +8,33 @@ using System.Linq;
 
 namespace ExpenseTrackerUppgift
 {
+    
     public class Expense
     {
         public string ExpenseNamn { get; set; }
-        public decimal ExpensePris { get; set; } // changed double to decimal to use it in SumExpenses method
+        public decimal ExpensePris { get; set; } 
         public string ExpenseKategori { get; set; }
-
+        
     }
 
+    //create decimal variables that can be used in SumExpenses and SumExpensesCategory
+    //IF VAT CHANGES, CHANGE THE VALUES HERE
+    public static class DefineradMoms
+    {
+        public static decimal UtbildningMoms = 0.0m;
+        public static decimal LivsemedelMoms = 0.16m;
+        public static decimal UnderhållningMoms = 0.12m;
+        public static decimal ÖvrigtMoms = 0.25m;
+        
+    }
+    
     public class Program
     {
+        
         public static List<Expense> expenses = new List<Expense>();
 
         //FUNKTION FÖR ATT LÄGGA TILL NY EXPENSE
-        public static void
-            AddExpense(string expenseNamn, decimal expensePris,
-                string expenseKategori) //double expensePris changed to decimal
+        public static void AddExpense(string expenseNamn, decimal expensePris, string expenseKategori) 
         {
             var expense = new Expense();
             expense.ExpenseNamn = expenseNamn;
@@ -38,8 +51,8 @@ namespace ExpenseTrackerUppgift
             Console.Write("Vad har din utgift för namn?: ");
             string utgiftNamn = Console.ReadLine();
 
-            Console.Write("Vad har din utgift för pris Kr (inkl moms) ?: ");
-            decimal utgiftPris = Convert.ToDecimal(Console.ReadLine()); // double utgiftPris changed to decimal
+            Console.Write("Vad har din utgift för pris Kr (inkl moms)?: ");
+            decimal utgiftPris = Convert.ToDecimal(Console.ReadLine()); 
 
             string utgiftKategori = "";
 
@@ -47,7 +60,6 @@ namespace ExpenseTrackerUppgift
 
             while (running)
             {
-                Console.WriteLine();
                 int selectedOption = ShowMenu("VILKEN KATEGORI TILLHÖR DIN UTGIFT?", new[]
                 {
                     "Utbildning",
@@ -94,11 +106,43 @@ namespace ExpenseTrackerUppgift
             AddExpense(utgiftNamn, utgiftPris, utgiftKategori);
 
         }
-        //FUNKTION FÖR SUM EXONSES CATEGORY
+
+
+        public static decimal SumExpenses(List<Expense> expenses, bool includeVAT)
+        {
+            decimal sum = 0;
+            foreach (Expense expense in expenses)
+            {
+                if (includeVAT == false)
+                {
+                    if (expense.ExpenseKategori == "Utbildning")
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * DefineradMoms.UtbildningMoms); //doesn't reflect realistic VAT value
+                    }
+                    else if (expense.ExpenseKategori == "Livsmedel")
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * DefineradMoms.LivsemedelMoms); //doesn't reflect realistic VAT value
+                    }
+                    else if (expense.ExpenseKategori == "Underhållning")
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * DefineradMoms.UnderhållningMoms); //doesn't reflect realistic VAT value
+                    }
+                    else
+                    {
+                        sum += expense.ExpensePris - (expense.ExpensePris * DefineradMoms.ÖvrigtMoms); //doesn't reflect realistic VAT value
+                    }
+                }
+                else
+                {
+                    sum += expense.ExpensePris;
+                }
+            }
+            return sum;
+        }
         public static void SumExpensesCategory()
         {
             bool running = true;
-            while(running)
+            while (running)
             {
                 MakeSpaceForUserMenu();
                 int selectedOptionChooseCat = ShowMenu("VILKEN KATEGORI TILLHÖR DIN UTGIFT?", new[]
@@ -114,28 +158,28 @@ namespace ExpenseTrackerUppgift
                     var sum = expenses.Where(x => x.ExpenseKategori == "Utbildning").Sum(x => x.ExpensePris);
                     Console.Clear();
                     Console.WriteLine($"Summan av dina utbildningsutgifter (inkl moms) är {sum}kr");
-                    Console.WriteLine($"Summan av dina utbildningsutgifter (EX moms) är {sum}kr");
+                    Console.WriteLine($"Summan av dina utbildningsutgifter (EX moms) är {sum * DefineradMoms.UtbildningMoms}kr");
                 }
                 else if (selectedOptionChooseCat == 1)
                 {
                     var sum = expenses.Where(x => x.ExpenseKategori == "Livsmedel").Sum(x => x.ExpensePris);
                     Console.Clear();
                     Console.WriteLine($"Summan av dina livsmedelsutgifter (inkl moms) är {sum}kr");
-                    Console.WriteLine($"Summan av dina livsmedelsutgifter (EX moms) är {sum - sum * 0.06m}kr");
+                    Console.WriteLine($"Summan av dina livsmedelsutgifter (EX moms) är {sum - sum * DefineradMoms.LivsemedelMoms }kr"); 
                 }
                 else if (selectedOptionChooseCat == 2)
                 {
                     var sum = expenses.Where(x => x.ExpenseKategori == "Underhållning").Sum(x => x.ExpensePris);
                     Console.Clear();
                     Console.WriteLine($"Summan av dina underhållningsutgifter (inkl moms) är {sum}kr");
-                    Console.WriteLine($"Summan av dina underhållningsutgifter (EX moms) är {sum - sum * 0.12m}kr");
+                    Console.WriteLine($"Summan av dina underhållningsutgifter (EX moms) är {sum - sum * DefineradMoms.UnderhållningMoms}kr"); 
                 }
                 else if (selectedOptionChooseCat == 3)
                 {
                     var sum = expenses.Where(x => x.ExpenseKategori == "Övrigt").Sum(x => x.ExpensePris);
                     Console.Clear();
                     Console.WriteLine($"Summan av dina övriga utgifter är (inkl moms) {sum}kr");
-                    Console.WriteLine($"Summan av dina övriga (EX moms) är {sum - sum * 0.25m}kr");
+                    Console.WriteLine($"Summan av dina övriga (EX moms) är {sum - sum * DefineradMoms.ÖvrigtMoms}kr");
                 }
                 else if (selectedOptionChooseCat == 4)
                 {
@@ -146,7 +190,7 @@ namespace ExpenseTrackerUppgift
             }
 
         }
-        
+
         //FUNKTION FÖR ATT GÖRA SPACE FÖR USERSELECTIONMENY
         static void MakeSpaceForUserMenu()
         {
@@ -158,6 +202,8 @@ namespace ExpenseTrackerUppgift
 
         public static void Main()
         {
+
+            
             //FIN VÄLKOMST TILL PROGRAMMET OCH SE TILL ATT INGA PROBLEM MED SVENSKA KARAKTÄRER SKER
             CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
             Console.WriteLine("███████████████████████████████████████████████████████████████████████");
@@ -165,7 +211,8 @@ namespace ExpenseTrackerUppgift
             Console.WriteLine("██▀─▀███─▄▄▄██─▄█▀██─█▄▀─██▄▄▄▄─██─▄█▀█████─████─▄─▄█─███▀██─▄▀███─▄─▄█");
             Console.WriteLine("▀▄▄█▄▄▀▄▄▄▀▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▄▄▄▄▄▀▄▄▀▄▄▀▄▄▀▄▄▀");
             Console.WriteLine();
-
+            
+            
             //GÖR EN WHILE LOOP SOM KÖRS TILLS ANVÄNDAREN HAR KLICKAT PÅ AVSLUTA I MENYN
             bool running = true;
             while (running)
@@ -196,7 +243,6 @@ namespace ExpenseTrackerUppgift
 
 
                 }
-
                 if (selectedOption == 1)
                 {
 
@@ -209,12 +255,10 @@ namespace ExpenseTrackerUppgift
                         Console.WriteLine(
                             $"Namn: {expense.ExpenseNamn},  Pris inkl moms: {expense.ExpensePris}Kr,  Kategori: {expense.ExpenseKategori}");
                     }
-
                     int addedByUser = expenses.Count;
                     Console.WriteLine();
-                    Console.WriteLine("ANTAL UTGIFTER: " + addedByUser);
-                    Console.WriteLine(
-                        $"Summa (inkl moms):  {Math.Round(SumExpenses(expenses, true), 2)} KR  ({Math.Round(SumExpenses(expenses, false), 2)} KR exkl. moms)");
+                    Console.WriteLine("ANTAL UPPGIFTER: " + addedByUser);
+                    Console.WriteLine($"Summa:  {Math.Round(SumExpenses(expenses, true), 2)} KR  ({Math.Round(SumExpenses(expenses, false), 2)} KR exkl. moms)");
                 }
 
                 if (selectedOption == 2)
@@ -223,13 +267,13 @@ namespace ExpenseTrackerUppgift
                     //CALLA PRINT SUMMA PER KATEGORI FUNKTION
                     SumExpensesCategory();
                 }
-
+                
                 if (selectedOption == 3)
                 {
                     bool runningDelete = true;
                     while (runningDelete)
                     {
-                        int selectedOptionDelete = ShowMenu("ÄR DU SÄKER PÅ ATT DU VILL TA BORT ALLA UTGIFTER? ", new[]
+                        int selectedOptionDelete = ShowMenu("ÄR DU SÄKER PÅ ATT DU VILL TA BORT ALLA UPPGIFTER? ", new[]
                         {
                             "JA",
                             "NEJ",
@@ -253,46 +297,6 @@ namespace ExpenseTrackerUppgift
             Console.WriteLine("▀▄▄█▄▄▀▄▄▄▀▀▀▄▄▄▄▄▀▄▄▄▀▀▄▄▀▄▄▄▄▄▀▄▄▄▄▄▀▀▀▀▄▄▄▀▀▄▄▀▄▄▀▄▄▄▄▄▀▄▄▀▄▄▀▄▄▀▄▄▀");
             Console.WriteLine("TACK FÖR ATT DU ANVÄNT XPENSE TRCKR, HA EN FIN DAG");
 
-        }
-
-        // Return the sum of all expenses in the specified list, with or without VAT based on the second parameter.
-        // This method *must* be in the program and *must* be used in both the main program and in the tests.
-        //
-        //IMPORTANT, IF ANY VALUES IN THIS METHOD ARE TO BE CHANGED, IT NEEDS TO BE CHANGED IN THE SumExpensesCategory ASWELL!
-        //THIS IS BECAUSE A SECOND FUNCTION IS USED TO ONLY CALCULATE THE SUM INCLUDEVAT AND THE SUM DONT INCLUDEVAT FOR ONLY ONE CATEGORY!
-        //THIS METOD IS SumExpensesCategory
-        //
-        public static decimal SumExpenses(List<Expense> expenses, bool includeVAT)
-        {
-            decimal sum = 0;
-            foreach (Expense expense in expenses)
-            {
-                if (includeVAT == false)
-                {
-                    if (expense.ExpenseKategori == "Utbildning")
-                    {
-                        sum += expense.ExpensePris - (expense.ExpensePris * 0);
-                    }
-                    else if (expense.ExpenseKategori == "Livsmedel")
-                    {
-                        sum += expense.ExpensePris - (expense.ExpensePris * 0.06m);
-                    }
-                    else if (expense.ExpenseKategori == "Underhållning")
-                    {
-                        sum += expense.ExpensePris - (expense.ExpensePris * 0.12m);
-                    }
-                    else
-                    {
-                        sum += expense.ExpensePris - (expense.ExpensePris * 0.25m);
-                    }
-                }
-                else
-                {
-                    sum += expense.ExpensePris;
-                }
-            }
-
-            return sum;
         }
 
         // Do not change this method.
@@ -329,7 +333,6 @@ namespace ExpenseTrackerUppgift
 
                 Console.ResetColor();
             }
-
             Console.CursorLeft = 0;
             Console.CursorTop = top - 1;
 
@@ -373,6 +376,101 @@ namespace ExpenseTrackerUppgift
             // Show the cursor again and return the selected option.
             Console.CursorVisible = true;
             return selected;
+        }
+
+    }
+    [TestClass]
+    public class ProgramTests
+    {
+        [TestMethod]
+        public void WithVAT()
+        {
+            List<Expense> expenses = new List<Expense>();
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Mat",
+                ExpensePris = 200,
+                ExpenseKategori = "Livsmedel"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Spel",
+                ExpensePris = 600,
+                ExpenseKategori = "Underhållning"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Skola",
+                ExpensePris = 5000,
+                ExpenseKategori = "Utbildning"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Annat",
+                ExpensePris = 400,
+                ExpenseKategori = "Övrigt"
+            });
+            decimal sum = Program.SumExpenses(expenses, true);
+            Assert.AreEqual(6200, sum);
+        }
+
+        [TestMethod]
+        public void WithoutVAT()
+        {
+            List<Expense> expenses = new List<Expense>();
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Mat",
+                ExpensePris = 200,
+                ExpenseKategori = "Livsmedel"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Spel",
+                ExpensePris = 600,
+                ExpenseKategori = "Underhållning"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Skola",
+                ExpensePris = 5000,
+                ExpenseKategori = "Utbildning"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Annat",
+                ExpensePris = 400,
+                ExpenseKategori = "Övrigt"
+            });
+            decimal sum = Program.SumExpenses(expenses, false);
+            Assert.AreEqual(6016, sum);
+        }
+
+        [TestMethod]
+        public void NoVATonlyEduc()
+        {
+            List<Expense> expenses = new List<Expense>();
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Skola",
+                ExpensePris = 5000,
+                ExpenseKategori = "Utbildning"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Läsmaterial",
+                ExpensePris = 600,
+                ExpenseKategori = "Utbildning"
+            });
+            expenses.Add(new Expense
+            {
+                ExpenseNamn = "Kvällskurs",
+                ExpensePris = 1000,
+                ExpenseKategori = "Utbildning"
+            });
+            
+            decimal sum = Program.SumExpenses(expenses, false);
+            Assert.AreEqual(6600, sum);
         }
     }
 }
